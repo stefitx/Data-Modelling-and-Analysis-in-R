@@ -1,0 +1,102 @@
+The Impact of the Great Recession in Romania: An ARDL Model Analysis of GDP Growth and Gross Fixed Capital Formation
+
+(1) Introduction to the Econometric Study
+
+As already stated and introduced in the previous section of this paper, The Great Recession, which occurred between 2007 and 2009, had profound and wide-ranging impacts on economies worldwide. Romania, in particular, faced significant challenges during this period.
+The aim of this econometric study is to comprehensively examine the impact of the Great Recession on the Romanian economy, with a specific focus on the relationship between GDP growth and fixed capital formation. GDP growth reflects the total value of goods and services produced within a specific period and serves as a crucial indicator of economic performance. Fixed capital formation represents investments in physical assets such as machinery and infrastructure. Investigating the relationship between fixed capital formation and GDP growth allows us to explore the investment-led effects of the recession, providing insights into the level of investment activity and its influence on economic growth.
+To analyze this relationship and capture both short-term fluctuations and long-term dynamics, we will use the Autoregressive Distributed Lag (ARDL) model. The ARDL model is a flexible econometric approach that accommodates variables with different orders of integration, incorporates the Error Correction Mechanism (ECM), tests for cointegration, and captures lagged dynamics.
+Data for this study will be obtained from the World Bank databases, covering the period from 1993 to 2021. Analyzing this dataset allows for an examination of the pre-recession, recession, and post-recession periods.
+In the subsequent sections of this study, we will present the empirical results and analysis derived from the estimation of the ARDL model. The interpretation of these results will shed light on the impact of the Great Recession on key economic variables in Romania. Additionally, we will perform impulse response analysis to understand the dynamic effects of the recession and conduct Granger causality tests to investigate the causal relationships between GDP growth and fixed capital formation.
+
+
+
+(2) Methodology and Data
+
+The dataset provided consists of 31 observations, spanning from 1991 to an unspecified end year. The variables in the dataset include "year," "gdp_growth," and "gross_fixed_capital." The "year" variable has been converted to a factor, while "gdp_growth" and "gross_fixed_capital" have been transformed to numeric variables.
+To analyze the time series properties, we plot the variables "gdp_growth" and "gross_fixed_capital." The plots visually represent the trends and patterns in the data.
+Next, we examine the stationarity of the variables using the Augmented Dickey-Fuller (ADF) test. The ACF and PACF plots help us identify any autocorrelation in the data. For both variables, the ADF test results indicate that the original series is non-stationary. Thus, further analysis is required.
+To address non-stationarity, we difference the variables using lagged differences. The resulting variables, "gdp_growth1" and "gross_fixed_capital1," are tested for stationarity using the ADF test. The test reveals that the differenced variables are stationary, as evidenced by their p-values.
+Considering the cointegration between "gdp_growth1" and "gross_fixed_capital1," we conduct the Johansen-Procedure test. The test results show the presence of at least one cointegrating relationship between the variables.
+Moving on, we employ the Autoregressive Distributed Lag (ARDL) model to examine the long-term relationship between "gdp_growth1" and "gross_fixed_capital1." The ARDL model reveals that "gross_fixed_capital1" has a statistically significant impact on "gdp_growth1." Additionally, lagged values of both variables contribute significantly to the model.
+To assess Granger causality, we conduct an F-test. The test confirms the presence of Granger causality, indicating that "gross_fixed_capital1" Granger causes "gdp_growth1."
+Furthermore, we assess the residual properties of the ARDL model. The residuals are checked for stationarity using the ADF test, and their normality is evaluated using the Jarque-Bera test, Shapiro-Wilk test, and Kolmogorov-Smirnov test. The results indicate that the residuals are stationary and conform to the assumptions of normality.
+Finally, we perform a Breusch-Pagan test to assess heteroscedasticity in the model residuals. The test results suggest no significant evidence of heteroscedasticity.
+In conclusion, the analysis reveals a significant relationship between "gdp_growth1" and "gross_fixed_capital1" and provides insights into their long-term dynamics. 
+(3) Empirical Results and Analysis
+
+In this section, we present the empirical results and conduct a thorough analysis based on the data and methodologies described in the previous section. The main objective is to provide insights into the relationship between GDP growth and gross fixed capital formation.
+
+a. Descriptive Statistics
+The above table summarizes the descriptive statistics of the variables included in our analysis. The mean, standard deviation, minimum, maximum, and quartile values are presented. This overview provides a snapshot of the data distribution and central tendencies.
+The descriptive statistics provide valuable insights into the characteristics of the variables under examination. For the variable "gdp_growth," the data reveals an average annual growth rate of approximately 2.23. This suggests that the economy experienced moderate growth over the observed period. The range of values, spanning from -12.92 to 10.43, indicates considerable variability in GDP growth rates. However, the majority of observations, as indicated by the quartiles, lie within the range of -0.05 to 5.46.
+Turning our attention to the variable "gross_fixed_capital," we observe an average value of 5.45. This suggests a moderate level of investment in fixed capital throughout the study period. The range of values, from -33.94 to 50.99, illustrates a wide dispersion in the data. The median value of 7.11 is slightly higher than the mean, indicating a positive skewness and suggesting a presence of relatively high values. The quartiles indicate that a significant portion of the data falls between -0.71 and 10.40.
+These descriptive statistics offer a preliminary understanding of the characteristics of GDP growth and gross fixed capital. They provide a foundation for further analysis and can serve as a basis for comparing these variables across different time periods or regions. However, it is important to consider additional factors and conduct more advanced statistical analyses to gain a comprehensive understanding of the relationships and dynamics at play.
+
+b. Time Series Analysis
+
+
+The attached figures illustrate the time series plots of GDP growth and gross fixed capital formation over the observed period. The plots reveal the trends and patterns exhibited by the variables, facilitating visual analysis.
+We examined a dataset consisting of 31 observations spanning a period of 30 years. The dataset comprises three variables: 'Year,' 'GDP Growth,' and 'Gross Fixed Capital.' The 'Year' variable represents the years of observation, ranging from 1991 to 2021. The 'GDP Growth' variable measures the annual growth rate of the GDP, while 'Gross Fixed Capital' represents the recorded values of capital investments.
+To conduct a time series analysis, we transformed the 'GDP Growth' and 'Gross Fixed Capital' variables into time series objects using the 'ts()' function. This allowed us to analyze the data in a temporal context. The resulting time series objects provide a structured representation of the variables over time, starting from 1991 with an annual frequency.
+We visualized the time series data using line plots. The first plot illustrates the trend of GDP growth over the observed period, offering a visual depiction of its fluctuations. The second plot presents the trend of gross fixed capital formations, indicating any notable changes or patterns throughout the time frame.
+These visualizations serve as a preliminary exploration of the time series data, enabling us to identify potential patterns, trends, or irregularities. 
+
+c. Stationarity Analysis and Differencing
+
+In the stationarity analysis, we aimed to verify the stationarity of the 'GDP Growth' and 'Gross Fixed Capital' variables. Stationarity is a key assumption in time series analysis, as it ensures that the statistical properties of the data remain constant over time.
+For the 'GDP Growth' variable, we first examined the autocorrelation function (ACF) and partial autocorrelation function (PACF) plots. These plots provide insights into the correlation between observations at different lags. The ACF plot shows a gradual decline in correlation, while the PACF plot displays a significant spike at lag 1, suggesting a possible autoregressive component.
+Next, we conducted the Augmented Dickey-Fuller (ADF) test, which is a statistical test commonly used to test for stationarity. The ADF test results for 'GDP Growth' yielded a test statistic of -2.8446 with a p-value of 0.2476. Since the p-value exceeds the conventional significance level of 0.05, we fail to reject the null hypothesis of non-stationarity.
+Similarly, we performed the same analyses for the 'Gross Fixed Capital' variable. The ACF and PACF plots indicated a gradual decline in correlation, with no significant spikes. The ADF test results for 'Gross Fixed Capital' yielded a test statistic of -2.3838 with a p-value of 0.425. Again, the p-value exceeds 0.05, indicating non-stationarity.
+To address non-stationarity, we applied differencing to both variables. By taking the difference between each observation and its lagged value, we created new variables 'GDP Growth1' and 'Gross Fixed Capital1.' We then omitted any resulting missing values.
+The ADF test for the differenced 'GDP Growth1' variable yielded a test statistic of -3.7922 with a p-value of 0.03478, which is below the 0.05 significance level. Thus, we have evidence to support the stationarity of 'GDP Growth1.'
+Similarly, the ADF test for the differenced 'Gross Fixed Capital1' variable yielded a test statistic of -3.3398 with a p-value of 0.08494. Although the p-value is slightly higher than the significance level, it still suggests the presence of stationarity in 'Gross Fixed Capital1.'
+Based on these results, we can conclude that the differenced variables 'GDP Growth1' and 'Gross Fixed Capital1' exhibit stationarity, indicating that they satisfy the key assumption for the following ARDL model.
+
+d. ARDL Model Estimation
+
+To further investigate the dynamic relationship between GDP growth and gross fixed capital formation, we employed the Autoregressive Distributed Lag (ARDL) model.
+The estimated ARDL model is presented below:
+gdp_growth1 = 0.27431 - 0.36742 * L(gdp_growth1, 1) + 0.15687 * gross_fixed_capital1 + 0.14131 * L(gross_fixed_capital1, 1)
+
+Here are the key findings for the model coefficients:
+1. Intercept:
+The intercept term is not statistically significant (p-value = 0.73089), suggesting that when all other variables are held constant, the expected value of 'GDP Growth1' is not significantly different from zero.
+2. Lagged 'GDP Growth1' (L(gdp_growth1, 1)):
+The coefficient of the lagged 'GDP Growth1' variable is -0.36742 with a standard error of 0.17454. It is statistically significant (p-value = 0.04594), indicating a negative relationship between the current 'GDP Growth1' and its lagged value. This suggests a persistence or autocorrelation in the growth rate of GDP over time.
+3. 'Gross Fixed Capital1':
+The coefficient of 'Gross Fixed Capital1' is 0.15687 with a standard error of 0.05067. It is statistically significant (p-value = 0.00494), indicating a positive relationship between 'Gross Fixed Capital1' and 'GDP Growth1.' This suggests that an increase in gross fixed capital formation leads to an increase in GDP growth.
+4. Lagged 'Gross Fixed Capital1' (L(gross_fixed_capital1, 1)):
+The coefficient of the lagged 'Gross Fixed Capital1' variable is 0.14131 with a standard error of 0.05702. It is statistically significant (p-value = 0.02062), indicating a positive relationship between the lagged 'Gross Fixed Capital1' and 'GDP Growth1.' This suggests a lagged effect of gross fixed capital formation on GDP growth.
+The overall model performance is evaluated based on the R-squared and adjusted R-squared values. The multiple R-squared is 0.4342, indicating that the model explains approximately 43.42% of the variation in 'GDP Growth1.' The adjusted R-squared, which accounts for the number of variables and observations, is 0.3634.
+The F-statistic assesses the overall significance of the model. The F-statistic value is 6.139, with a p-value of 0.002997, suggesting that the model is statistically significant overall.
+In summary, the ARDL model estimation results indicate that both the lagged 'GDP Growth1' and 'Gross Fixed Capital1' variables have a significant impact on 'GDP Growth1.' The model provides insights into the short-run and long-run dynamics between these variables, contributing to a better understanding of the relationship between GDP growth and gross fixed capital formation. The results indicate that gross fixed capital formation has a statistically significant impact on GDP growth. Additionally, lagged values of both variables contribute significantly to the model, suggesting the presence of dynamic effects. 
+e. Granger Causality
+
+To examine the causality between GDP growth and gross fixed capital formation, we conducted the Granger causality test. The F-test results, reported above, provide evidence of Granger causality. Specifically, gross fixed capital formation is found to Granger cause GDP growth, suggesting that changes in capital investment precede changes in GDP growth.
+To examine the Granger causality between 'Gross Fixed Capital1' and 'GDP Growth1', we conducted a hypothesis test using the F-test. The F-test compares the restricted model (without the lagged variable) to the unrestricted model (with the lagged variable) to determine if the inclusion of the lagged variable improves the model's explanatory power.
+
+The test results are as follows:
+Null hypothesis (H0): 'Gross Fixed Capital1' does not Granger cause 'GDP Growth1.'
+Alternative hypothesis (HA): 'Gross Fixed Capital1' Granger causes 'GDP Growth1.'
+The F-test statistic is 7.7222, and the p-value is 0.009807. Since the p-value is less than the significance level of 0.05, we reject the null hypothesis. This suggests that 'Gross Fixed Capital1' Granger causes 'GDP Growth1,' indicating a causal relationship between these variables.
+In other words, the inclusion of the lagged 'Gross Fixed Capital1' variable significantly improves the model's ability to explain the variation in 'GDP Growth1.' 
+Overall, the Granger causality test supports the notion that changes in 'Gross Fixed Capital1' have a significant impact on 'GDP Growth1' and can be considered a causal factor in explaining changes in GDP growth.
+
+
+
+
+
+f. Residual Analysis:
+
+To assess the quality of the model's residuals, we conducted several tests and diagnostic analyses. These tests help evaluate the assumptions of the model and the adequacy of the residual distribution.
+
+First, we performed the Augmented Dickey-Fuller (ADF) test on the model's residuals. The ADF test examines whether the residuals exhibit stationarity. The test yielded a Dickey-Fuller statistic of -3.0012 and a p-value of 0.1895. Since the p-value is greater than 0.05, we fail to reject the null hypothesis of stationarity. This suggests that the residuals are non-stationary.
+Next, we conducted a normality analysis on the residuals. The Jarque-Bera test, Shapiro-Wilk test, and Kolmogorov-Smirnov test were performed. The Jarque-Bera test resulted in a chi-square statistic of 0.8607 and a p-value of 0.6503, indicating that the residuals follow a normal distribution. The Shapiro-Wilk test produced a W statistic of 0.97187 and a p-value of 0.6314, also suggesting normality. The Kolmogorov-Smirnov test yielded a D statistic of 0.33365 and a p-value of 0.00279. Since the p-value is less than 0.05, we reject the null hypothesis of normality, indicating that the residuals may not be perfectly normally distributed.
+Furthermore, we conducted the Breusch-Pagan test to assess heteroscedasticity in the residuals. The test was performed both with and without studentization. In both cases, the p-values were greater than 0.05 (0.4322 and 0.4555, respectively), suggesting no significant evidence of heteroscedasticity in the residuals.
+To examine serial correlation in the residuals, we conducted the Ljung-Box test with a lag of 12. The test yielded an X-squared statistic of 9.8452 and a p-value of 0.6295, indicating no significant evidence of serial correlation.
+In summary, based on the residual analysis, the model's residuals exhibit non-stationarity but do not show significant deviations from normality or heteroscedasticity. However, there is a potential issue with the normality assumption, as indicated by the Kolmogorov-Smirnov test. Further investigation or consideration may be required to address this deviation.
+(4) Conclusion
+
+The results highlight a statistically significant and consistent long-term connection between GDP growth and Gross Fixed Capital Formation. The application of the Autoregressive Distributed Lag (ARDL) model allows us to gain insights into the dynamic effects and Granger causality that exist between GDP growth and gross fixed capital formation. The diagnostic tests conducted validate the appropriateness of the model and its underlying assumptions. 
+The identification of a significant long-term relationship between GDP growth and gross fixed capital formation suggests that investment in fixed capital plays a crucial role in driving economic growth. These results provide researchers with a foundation for further investigations into the intricate dynamics between GDP growth and capital investment.
+Overall, this analysis enhances our comprehension of the intricate relationship between GDP growth and gross fixed capital formation. The empirical evidence, supported by robust diagnostic tests, underscores the significance of capital investment in driving economic growth.

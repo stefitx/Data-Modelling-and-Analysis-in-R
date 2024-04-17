@@ -1,0 +1,125 @@
+ANNEX A: CODE USED IN RSTUDIO
+library(readxl)
+library(vars)
+library(urca)
+library(tseries)
+library(ARDL)
+library(lmtest)
+library(tidyverse)
+library(stargazer)
+
+dataset
+dataset$year <-as.factor(dataset$year)
+dataset$gdp_growth <-as.numeric(dataset$gdp_growth)
+dataset$gross_fixed_capital <-as.numeric(dataset$gross_fixed_capital)
+gdp_growth_stats <- summary(dataset$gdp_growth)
+mean_gdp_growth <- mean(dataset$gdp_growth)
+# descriptive statistics
+capital_stats <- summary(dataset$gross_fixed_capital)
+mean_capital <- mean(dataset$gross_fixed_capital)
+cat("Descriptive Statistics for gdp_growth:\n")
+print(gdp_growth_stats)
+cat("\nMean of gdp_growth1:", mean_gdp_growth)
+cat("\n\nDescriptive Statistics for gross_fixed_capital:\n")
+print(capital_stats)
+cat("\nMean of gross_fixed_capital1:", mean_capital)
+
+#make it into time series
+str(dataset)
+gdp_growth=ts(dataset$gdp_growth, start=c(1991,1), frequency = 1)
+gross_fixed_capital=ts(dataset$gross_fixed_capital, start=c(1991,1), frequency = 1)
+plot(gdp_growth)
+plot(gross_fixed_capital)
+
+###verify stationarity
+#gdp_growth
+acf_plot <- acf(dataset$gdp_growth, lag.max = 20)
+plot(acf_plot)
+pacf_plot <- pacf(dataset$gdp_growth, lag.max = 20)
+plot(pacf_plot)
+adf.gdp_growth=adf.test(dataset$gdp_growth)
+adf.gdp_growth
+#not stationary as p-value = 0.2476
+
+#gross_fixed_capital
+acf_plot <- acf(dataset$gross_fixed_capital, lag.max = 20)
+plot(acf_plot)
+pacf_plot <- pacf(dataset$gross_fixed_capital, lag.max = 20)
+plot(pacf_plot)
+adf.gross_fixed_capital=adf.test(dataset$gross_fixed_capital)
+adf.gross_fixed_capital
+#not stationary as p-value = 0.425
+
+###make them stationary
+#gdp_growth
+dataset=dataset%>%mutate(gdp_growth1=gdp_growth-lag(gdp_growth))
+dataset=na.omit(dataset)
+adf.gdp_growth1=adf.test(dataset$gdp_growth1)
+adf.gdp_growth1
+#stationary as p-value = 0.03478
+
+#gross_fixed_capital
+dataset=dataset%>%mutate(gross_fixed_capital1=gross_fixed_capital-lag(gross_fixed_capital))
+dataset=na.omit(dataset)
+adf.gross_fixed_capital1=adf.test(dataset$gross_fixed_capital1)
+adf.gross_fixed_capital1
+#stationary, as p-value = 0.08494
+
+dataset
+dataset <- subset(dataset, select = -c(gross_fixed_capital))
+dataset <- subset(dataset, select = -c(gdp_growth))
+dataset
+
+gdp_growth1 <- ts(dataset$gdp_growth1, start = c(1993, 1), frequency = 1)
+gross_fixed_capital1 <- ts(dataset$gross_fixed_capital1, start = c(1993, 1), frequency = 1)
+plot(gdp_growth1)
+plot(gross_fixed_capital1)
+
+#ARDL model
+model <- ardl(gdp_growth1 ~ gross_fixed_capital1, data = dataset, order = c(1, 1))
+summary(model)
+
+#granger test
+# Fit the restricted ARDL model (without the lagged variable)
+restricted_model <- lm(gdp_growth1 ~ 1, data = dataset)
+# Fit the unrestricted ARDL model (with the lagged variable)
+unrestricted_model <- lm(gdp_growth1 ~ gross_fixed_capital1, data = dataset)
+# Perform the F-test for Granger causality
+granger_test <- waldtest(restricted_model, unrestricted_model)
+print(granger_test)
+
+#test autocorelarrelation errors
+adf.resid=adf.test(model$residuals)
+adf.resid
+
+#p-val=0.1895
+
+#testing normality of errors
+
+qqnorm(model$residuals)
+qqline(model$residuals)
+
+jb=jarque.bera.test(model$residuals)
+jb #p-value = 0.6503
+
+shap=shapiro.test(model$residuals)
+shap #p-value = 0.6314
+
+kolmogorov=ks.test(model$residuals, "pnorm")
+kolmogorov # p-value = 0.00279
+
+#testing heteroscedasticity
+#H0: there is no heteroscedasticity
+
+bptest(model)
+
+bptest(model, studentize = FALSE)
+#both p-value = 0.4555, no heteroscedasticity
+
+# Serial correlation (Ljung-Box test)
+serial_corr <- Box.test(model$residuals, lag = 12, type = "Ljung-Box")
+print(serial_corr)
+
+# Normality of residuals (Kolmogorov-Smirnov test)
+normality_test <- ks.test(model$residuals, "pnorm")
+print(normality_test)

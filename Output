@@ -1,0 +1,288 @@
+> dataset
+# A tibble: 31 × 3
+    year gdp_growth gross_fixed_capital
+   <dbl>      <dbl>               <dbl>
+ 1  1991    -12.9                -31.6 
+ 2  1992     -8.77                11.0 
+ 3  1993      1.53                 8.30
+ 4  1994      3.93                20.7 
+ 5  1995      6.23                 7.11
+ 6  1996      3.91                 8.40
+ 7  1997     -4.85                -1.44
+ 8  1998     -2.03                -4.68
+ 9  1999     -0.377               -1.91
+10  2000      2.46                 5.85
+# ℹ 21 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> dataset$year <-as.factor(dataset$year)
+> dataset$gdp_growth <-as.numeric(dataset$gdp_growth)
+> dataset$gross_fixed_capital <-as.numeric(dataset$gross_fixed_capital)
+> gdp_growth_stats <- summary(dataset$gdp_growth)
+> mean_gdp_growth <- mean(dataset$gdp_growth)
+> # descriptive statistics
+> capital_stats <- summary(dataset$gross_fixed_capital)
+> mean_capital <- mean(dataset$gross_fixed_capital)
+> # Print the results
+> cat("Descriptive Statistics for gdp_growth:\n")
+Descriptive Statistics for gdp_growth:
+> print(gdp_growth_stats)
+     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+-12.91821  -0.05335   3.85316   2.22530   5.46056  10.42811 
+> cat("\nMean of gdp_growth:", mean_gdp_growth)
+
+Mean of gdp_growth: 2.225301
+> cat("\n\nDescriptive Statistics for gross_fixed_capital:\n")
+
+Descriptive Statistics for gross_fixed_capital:
+> print(capital_stats)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-33.9397  -0.7097   7.1120   5.4459  10.4025  50.9976 
+> cat("\nMean of gross_fixed_capital:", mean_capital)
+
+Mean of gross_fixed_capital: 5.445881
+> #make it into time series
+> str(dataset)
+tibble [31 × 3] (S3: tbl_df/tbl/data.frame)
+ $ year               : Factor w/ 31 levels "1991","1992",..: 1 2 3 4 5 6 7 8 9 10 ...
+ $ gdp_growth         : num [1:31] -12.92 -8.77 1.53 3.93 6.23 ...
+ $ gross_fixed_capital: num [1:31] -31.62 10.97 8.3 20.72 7.11 ...
+> gdp_growth=ts(dataset$gdp_growth, start=c(1991,1), frequency = 1)
+> gross_fixed_capital=ts(dataset$gross_fixed_capital, start=c(1991,1), frequency = 1)
+> plot(gdp_growth)
+
+
+
+
+
+
+
+
+
+
+
+> plot(gross_fixed_capital)
+
+> ###verify stationarity
+> #gdp_growth
+> acf_plot <- acf(dataset$gdp_growth, lag.max = 20)
+> plot(acf_plot)
+> pacf_plot <- pacf(dataset$gdp_growth, lag.max = 20)
+> plot(pacf_plot)
+
+
+> adf.gdp_growth=adf.test(dataset$gdp_growth)
+> adf.gdp_growth
+
+	Augmented Dickey-Fuller Test
+
+data:  dataset$gdp_growth
+Dickey-Fuller = -2.8446, Lag order = 3, p-value = 0.2476
+alternative hypothesis: stationary
+
+> #gross_fixed_capital
+> acf_plot <- acf(dataset$gross_fixed_capital, lag.max = 20)
+
+
+
+
+> pacf_plot <- pacf(dataset$gross_fixed_capital, lag.max = 20)
+> plot(pacf_plot)
+
+
+> adf.gross_fixed_capital=adf.test(dataset$gross_fixed_capital)
+> adf.gross_fixed_capital
+
+	Augmented Dickey-Fuller Test
+
+data:  dataset$gross_fixed_capital
+Dickey-Fuller = -2.3838, Lag order = 3, p-value = 0.425
+alternative hypothesis: stationary
+
+> ###make them stationary
+> #gdp_growth
+> dataset=dataset%>%mutate(gdp_growth1=gdp_growth-lag(gdp_growth))
+> dataset=na.omit(dataset)
+> adf.gdp_growth1=adf.test(dataset$gdp_growth1)
+> adf.gdp_growth1
+
+	Augmented Dickey-Fuller Test
+
+data:  dataset$gdp_growth1
+Dickey-Fuller = -3.7922, Lag order = 3, p-value = 0.03478
+alternative hypothesis: stationary
+
+> #gross_fixed_capital
+> dataset=dataset%>%mutate(gross_fixed_capital1=gross_fixed_capital-lag(gross_fixed_capital))
+> dataset=na.omit(dataset)
+> adf.gross_fixed_capital1=adf.test(dataset$gross_fixed_capital1)
+> adf.gross_fixed_capital1
+
+	Augmented Dickey-Fuller Test
+
+data:  dataset$gross_fixed_capital1
+Dickey-Fuller = -3.3398, Lag order = 3, p-value = 0.08494
+alternative hypothesis: stationary
+
+> dataset
+# A tibble: 29 × 5
+   year  gdp_growth gross_fixed_capital gdp_growth1 gross_fixed_capital1
+   <fct>      <dbl>               <dbl>       <dbl>                <dbl>
+ 1 1993       1.53                 8.30      10.3                  -2.66
+ 2 1994       3.93                20.7        2.40                 12.4 
+ 3 1995       6.23                 7.11       2.30                -13.6 
+ 4 1996       3.91                 8.40      -2.33                  1.29
+ 5 1997      -4.85                -1.44      -8.76                 -9.84
+ 6 1998      -2.03                -4.68       2.82                 -3.25
+ 7 1999      -0.377               -1.91       1.65                  2.77
+ 8 2000       2.46                 5.85       2.84                  7.76
+ 9 2001       5.22                10.5        2.76                  4.70
+10 2002       5.70                 7.31       0.485                -3.24
+# ℹ 19 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> dataset <- subset(dataset, select = -c(gross_fixed_capital))
+> dataset <- subset(dataset, select = -c(gdp_growth))
+> dataset
+# A tibble: 29 × 3
+   year  gdp_growth1 gross_fixed_capital1
+   <fct>       <dbl>                <dbl>
+ 1 1993       10.3                  -2.66
+ 2 1994        2.40                 12.4 
+ 3 1995        2.30                -13.6 
+ 4 1996       -2.33                  1.29
+ 5 1997       -8.76                 -9.84
+ 6 1998        2.82                 -3.25
+ 7 1999        1.65                  2.77
+ 8 2000        2.84                  7.76
+ 9 2001        2.76                  4.70
+10 2002        0.485                -3.24
+# ℹ 19 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> gdp_growth1 <- ts(dataset$gdp_growth1, start = c(1993, 1), frequency = 1)
+> gross_fixed_capital1 <- ts(dataset$gross_fixed_capital1, start = c(1993, 1), frequency = 1)
+> plot(gdp_growth1)
+
+
+
+
+> plot(gross_fixed_capital1)
+
+
+> #ARDL model
+> model <- ardl(gdp_growth1 ~ gross_fixed_capital1, data = dataset, order = c(1, 1))
+> summary(model)
+
+Time series regression with "ts" data:
+Start = 2, End = 29
+
+Call:
+dynlm::dynlm(formula = full_formula, data = data, start = start, 
+    end = end)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-8.5795 -1.6867  0.1294  2.4534  7.0727 
+
+Coefficients:
+                           Estimate Std. Error t value Pr(>|t|)   
+(Intercept)                 0.27431    0.78830   0.348  0.73089   
+L(gdp_growth1, 1)          -0.36742    0.17454  -2.105  0.04594 * 
+gross_fixed_capital1        0.15687    0.05067   3.096  0.00494 **
+L(gross_fixed_capital1, 1)  0.14131    0.05702   2.478  0.02062 * 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.165 on 24 degrees of freedom
+Multiple R-squared:  0.4342,	Adjusted R-squared:  0.3634 
+F-statistic: 6.139 on 3 and 24 DF,  p-value: 0.002997
+
+> # Fit the restricted ARDL model (without the lagged variable)
+> restricted_model <- lm(gdp_growth1 ~ 1, data = dataset)
+> # Fit the unrestricted ARDL model (with the lagged variable)
+> unrestricted_model <- lm(gdp_growth1 ~ gross_fixed_capital1, data = dataset)
+> # Perform the F-test for Granger causality
+> granger_test <- waldtest(restricted_model, unrestricted_model)
+> # Print the test results
+> print(granger_test)
+Wald test
+
+Model 1: gdp_growth1 ~ 1
+Model 2: gdp_growth1 ~ gross_fixed_capital1
+  Res.Df Df      F   Pr(>F)   
+1     28                      
+2     27  1 7.7222 0.009807 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> adf.resid=adf.test(model$residuals)
+> adf.resid
+
+	Augmented Dickey-Fuller Test
+
+data:  model$residuals
+Dickey-Fuller = -3.0012, Lag order = 3, p-value = 0.1895
+alternative hypothesis: stationary
+
+> qqnorm(model$residuals)
+
+
+> qqline(model$residuals)
+
+
+> jb=jarque.bera.test(model$residuals)
+> jb #p-value = 0.6503
+
+	Jarque Bera Test
+
+data:  model$residuals
+X-squared = 0.8607, df = 2, p-value = 0.6503
+
+> shap=shapiro.test(model$residuals)
+> shap #p-value = 0.6314
+
+	Shapiro-Wilk normality test
+
+data:  model$residuals
+W = 0.97187, p-value = 0.6314
+
+> kolmogorov=ks.test(model$residuals, "pnorm")
+> kolmogorov # p-value = 0.00279
+
+	Exact one-sample Kolmogorov-Smirnov test
+
+data:  model$residuals
+D = 0.33365, p-value = 0.00279
+alternative hypothesis: two-sided
+
+> bptest(model)
+
+	studentized Breusch-Pagan test
+
+data:  model
+BP = 2.7476, df = 3, p-value = 0.4322
+
+> bptest(model, studentize = FALSE)
+
+	Breusch-Pagan test
+
+data:  model
+BP = 2.6116, df = 3, p-value = 0.4555
+
+> # Serial correlation (Ljung-Box test)
+> serial_corr <- Box.test(model$residuals, lag = 12, type = "Ljung-Box")
+> print(serial_corr)
+
+	Box-Ljung test
+
+data:  model$residuals
+X-squared = 9.8452, df = 12, p-value = 0.6295
+
+> # Normality of residuals (Kolmogorov-Smirnov test)
+> normality_test <- ks.test(model$residuals, "pnorm")
+> print(normality_test)
+
+	Exact one-sample Kolmogorov-Smirnov test
+
+data:  model$residuals
+D = 0.33365, p-value = 0.00279
+alternative hypothesis: two-sided
+
+
